@@ -71,3 +71,7 @@ native_prefix_url = f"{BASE_RES_URL}assets/{bundle_name}/native/{native_prefix}/
 利用你猜出的后缀（如 .jpg 或 .png）。
 
 保存为：102005_6.jpg。
+
+
+
+现在的逻辑是先运行1，然后运行2，然后运行3指定要下载哪个bundle（bundle名可以从settings.xxxx.json获取），最后如果config中有提到spine骨骼数据就可以使用4_spine_extractor将特定的bundle中的骨骼数据提取出来，或者如果是advstillstillxxxx这种就可以使用4_video_maker恢复视频。
