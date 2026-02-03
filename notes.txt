@@ -75,3 +75,38 @@ native_prefix_url = f"{BASE_RES_URL}assets/{bundle_name}/native/{native_prefix}/
 
 
 现在的逻辑是先运行1，然后运行2，然后运行3指定要下载哪个bundle（bundle名可以从settings.xxxx.json获取），最后如果config中有提到spine骨骼数据就可以使用4_spine_extractor将特定的bundle中的骨骼数据提取出来，或者如果是advstillstillxxxx这种就可以使用4_video_maker恢复视频。
+
+
+
+1. 为什么 cc.JsonAsset 会误导普通脚本？
+在 config.json 中，Cocos 经常把文本类资源（包括 .json, .atlas, .txt）统一归类为 cc.JsonAsset 或 cc.TextAsset。
+
+普通逻辑：看到 cc.JsonAsset -> 认为后缀是 .json -> 拼接 URL .../uuid.nativeHash.json -> 下载失败（因为服务器上实际存放的是 .atlas）。
+
+2. 3_bundle_downloader.py 是如何“修正”这个错误的？
+它的核心优势在于它不完全信任 config 中的类型，而是去读取了 Import 数据。
+
+请看 3_bundle_downloader.py 中的 process_asset_task 和 parse_import_data_in_memory 函数：
+
+获取 Config 信息：
+脚本首先看到类型是 cc.JsonAsset，初步猜测后缀是 .json。
+
+读取 Import 文件 (关键步骤)：
+它会利用你脚本 2 下载好的 imports 文件夹（或者在线下载），读取该 UUID 对应的 JSON 元数据。
+
+提取 _native 字段：
+在 Import JSON 中，Cocos 会记录该资源对应的真实物理文件后缀。
+
+JSON
+// Import json 示例
+{
+  "__type__": "cc.JsonAsset",
+  "_name": "hero",
+  "_native": ".atlas"  <-- 这里！
+}
+修正后缀：
+parse_import_data_in_memory 函数读取到 _native 是 .atlas。
+脚本将 .atlas 加入到 exts_to_try 列表，并优先尝试。
+
+下载成功：
+脚本拼接出 .../uuid.nativeHash.atlas，成功下载到文件。

@@ -18,7 +18,7 @@ MAX_WORKERS = 8
 
 # 🎯 指定下载目标 (测试用)，空列表代表全部
 # TARGET_BUNDLES = ["AdvStillstill102030"] 
-TARGET_BUNDLES = ['AdvStillstill102015'] 
+TARGET_BUNDLES = ['Castcast007102'] 
 
 HEADERS = {
     "Host": "game.sweet-home-maid.com",
