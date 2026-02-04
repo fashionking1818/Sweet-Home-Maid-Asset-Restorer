@@ -9,3 +9,5 @@ assets.rar
 #assets_restored.rar
 #configs.rar
 #imports.rar
+*.rar
+*.zip

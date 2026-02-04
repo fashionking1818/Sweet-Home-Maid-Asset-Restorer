@@ -25,13 +25,13 @@
 
 ## 使用顺序
 
-1. 可以直接解压 `configs.rar` 或者使用 `1_config_downloader.py` 下载配置映射。
+1. 使用 `1_config_downloader.py` 下载配置映射。
    
-2. 可以直接解压 `imports.rar` 或者使用 `2_import_downloader.py` 下载 import 文件夹，其中会使用到1中下载的 config 文件。
+2. 使用 `2_import_downloader.py` 下载 import 文件夹，其中会使用到1中下载的 config 文件。
    
 3. 使用 `5_bundle_and_spine.py` 尝试下载所有资源或者指定包名
    
-   包名可以参照 `assets_restored.rar` 中的内容（只有部分测试时的包名）或者查看 `settings.xxxx.json` 中的assets.bundleVers 字段中的“AdvStillstill1001”这种，不需要后面的hash值（有全部包名）。
+   包名请查看 `settings.xxxx.json` 中的assets.bundleVers 字段中的“AdvStillstill1001”这种，不需要后面的hash值（有全部包名）。
    
    ❗注意：由于网络原因可能会导致某些资源下载失败。
 
