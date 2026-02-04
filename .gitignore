@@ -2,9 +2,11 @@ assets/
 assets_restored/
 configs/
 imports/
+tmp/
 __pycache__/
 *.pyc
 .DS_Store
+notes.txt
 assets.rar
 #assets_restored.rar
 #configs.rar
