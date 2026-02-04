@@ -2,7 +2,10 @@ assets/
 assets_restored/
 configs/
 imports/
+__pycache__/
+*.pyc
+.DS_Store
 assets.rar
-assets_restored.rar
-configs.rar
-imports.rar
+#assets_restored.rar
+#configs.rar
+#imports.rar

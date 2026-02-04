@@ -16,8 +16,8 @@ LOCAL_IMPORT_ROOT = "imports"
 OVERWRITE = False
 MAX_WORKERS = 8  # 可以根据网速调高
 
-# 指定下载目标，为空则处理 settings 中的所有 bundle
-TARGET_BUNDLES = ['Castcast009001'] 
+# [已修改] 默认留空，改为在运行时让用户输入
+TARGET_BUNDLES = [] 
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
@@ -182,6 +182,7 @@ def extract_spines_for_bundle(bundle_name, config, save_dir):
 # --- [主流程] Bundle 遍历与子进度条 ---
 
 def process_bundle(bundle_name, bundle_ver, pbar_main):
+    # 使用全局变量 TARGET_BUNDLES 判断
     if TARGET_BUNDLES and bundle_name not in TARGET_BUNDLES:
         pbar_main.update(1)
         return
@@ -229,11 +230,37 @@ def process_bundle(bundle_name, bundle_ver, pbar_main):
 
 def main():
     print("=== DMM 终极整合下载器 (原生+Spine+双重进度条) ===")
+    
+    # [新增] 用户输入逻辑
+    global TARGET_BUNDLES
+    user_input = input("请输入目标 Bundle 名称 (多个用空格分隔，直接回车则下载全部): ").strip()
+    
+    if user_input:
+        TARGET_BUNDLES = user_input.split()
+        print(f"🎯 已锁定目标: {TARGET_BUNDLES}")
+    else:
+        TARGET_BUNDLES = []
+        print("🌐 未指定目标，将下载 settings 中的所有 Bundle")
+
     settings = get_settings_locally()
     if not settings: return
 
     bundle_vers = settings['assets']['bundleVers']
-    bundles_to_run = TARGET_BUNDLES if TARGET_BUNDLES else list(bundle_vers.keys())
+    
+    # 如果指定了目标，就只遍历目标（避免进度条显示全部几百个，却只下1个）
+    # 如果没指定，就遍历 settings 里的全部
+    if TARGET_BUNDLES:
+        bundles_to_run = [b for b in TARGET_BUNDLES if b in bundle_vers]
+        # 提示用户输入的某些 bundle 可能不存在
+        missing = [b for b in TARGET_BUNDLES if b not in bundle_vers]
+        if missing:
+            print(f"⚠️ 警告: 以下 Bundle 在服务器上未找到: {missing}")
+    else:
+        bundles_to_run = list(bundle_vers.keys())
+
+    if not bundles_to_run:
+        print("❌ 没有可执行的任务。")
+        return
 
     with tqdm(total=len(bundles_to_run), unit="pkg", desc="📦 Total Bundles") as pbar:
         for b_name in bundles_to_run:

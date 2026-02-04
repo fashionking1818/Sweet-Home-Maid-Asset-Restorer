@@ -1,6 +1,6 @@
 import os
 
-target_dir = r'assets_restored'
+target_dir = input('请输入要清理的目录：')
 
 # topdown=False 确保先遍历子目录（自底向上）
 for root, dirs, files in os.walk(target_dir, topdown=False):

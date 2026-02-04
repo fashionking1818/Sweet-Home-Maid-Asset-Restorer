@@ -3,8 +3,8 @@ import json
 from tqdm import tqdm
 
 # ================= ⚙️ 配置区域 =================
-# 填写你下载好的资源根目录文件夹名称
-TARGET_DIR = "tmp" 
+# 输入下载好的资源根目录文件夹名称
+TARGET_DIR = input("资源根目录文件夹（configs，imports等等）：")
 
 # 缩进空格数 (VSCode 默认通常是 2 或 4)
 INDENT_SIZE = 4 
